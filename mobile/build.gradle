@@ -1,15 +1,43 @@
 apply plugin: 'com.android.application'
 
-android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
 
+android {
+    signingConfigs {
+        config {
+            // Define a signing properties file.
+            String propertiesFilename = extUserHome + "/.signing/gdg.properties";
+            String keystoreFilename = extUserHome+'/Google Drive/GDG Montreal Android/organizer_shared/2015.KitchenSink.jks';
+
+            // If file exists
+            if(! new File(propertiesFilename).exists()) {
+                println "*** Error. Could not find signing properties file: (${propertiesFilename}) ***";
+            } else if(! new File(keystoreFilename).exists()) {
+                println "*** Error. Could not find keystore file: (${keystoreFilename}) ***";
+            } else {
+                // We found both files.
+                println "*** signingConfigs: Found files for ${propertiesFilename} and ${keystoreFilename}. ***";
+
+                println "*** signingConfigs: building config. ***";
+
+                Properties props = new Properties()
+                props.load(new FileInputStream(file(propertiesFilename)))
+                storeFile file(keystoreFilename)
+
+                storePassword props['keystore.password']
+                keyAlias props['key.alias']
+                keyPassword 'patateandroidesassocies'
+            }
+
+        }
+    }
+    compileSdkVersion extCompileSdkVersion
+    buildToolsVersion extBuildToolsVersion
     defaultConfig {
         applicationId "com.android_montreal.attendance"
-        minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion extMinSdkVersion
+        targetSdkVersion extTargetSdkVersion
+        versionName extVersionName
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
@@ -17,11 +45,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    // Firebase needs this.
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+    }
+    productFlavors {
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.google.android.gms:play-services:7.0.0'
+    compile 'com.google.android.gms:play-services-identity:7.3.0'
+    compile 'com.google.android.gms:play-services-plus:7.3.0'
+    // compile 'com.google.android.gms:play-services:7.0.0'
+    compile 'com.firebase:firebase-client-android:2.0.3+'
 }

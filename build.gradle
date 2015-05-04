@@ -5,11 +5,25 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'com.android.tools.build:gradle:1.1.3'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+ext {
+    extUserHome = System.getProperty("user.home");
+
+    extCompileSdkVersion = 22;
+    extBuildToolsVersion = "22.0.1";
+
+    extMinSdkVersion = 15;
+    extTargetSdkVersion = 22;
+
+    extVersionCode = 1;
+    extVersionName = "1.0";
+
 }
 
 allprojects {

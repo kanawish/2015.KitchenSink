@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion extCompileSdkVersion
+    buildToolsVersion extBuildToolsVersion
 
     defaultConfig {
         applicationId "com.android_montreal.attendance"
         minSdkVersion 21
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion extTargetSdkVersion
+        versionCode extVersionCode
+        versionName extVersionName
     }
     buildTypes {
         release {
@@ -23,5 +23,5 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.android.support:wearable:1.1.0'
-    compile 'com.google.android.gms:play-services-wearable:7.0.0'
+    compile 'com.google.android.gms:play-services-wearable:7.3.0'
 }

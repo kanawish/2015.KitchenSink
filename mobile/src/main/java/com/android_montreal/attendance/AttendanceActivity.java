@@ -14,7 +14,6 @@ public class AttendanceActivity extends ActionBarActivity {
       setContentView(R.layout.activity_attendance);
    }
 
-
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       // Inflate the menu; this adds items to the action bar if it is present.
@@ -36,4 +35,5 @@ public class AttendanceActivity extends ActionBarActivity {
 
       return super.onOptionsItemSelected(item);
    }
+
 }
