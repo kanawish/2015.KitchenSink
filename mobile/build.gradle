@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
-
 android {
+    // NOTE: Both debug and release are being signed here, since it's needed for testing purposes with backends.
     signingConfigs {
         config {
             // Define a signing properties file.
@@ -40,11 +40,20 @@ android {
         signingConfig signingConfigs.config
     }
     buildTypes {
+        debug {
+            applicationIdSuffix '.dev'
+            versionNameSuffix '-dev'
+        }
+        mock {
+            applicationIdSuffix '.mock'
+            versionNameSuffix '-mock'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     // Firebase needs this.
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
@@ -54,16 +63,26 @@ android {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/LICENSE-FIREBASE.txt'
     }
-    productFlavors {
-    }
 }
+
+apply plugin: 'com.jakewharton.hugo'
+apply plugin: 'com.neenbedankt.android-apt'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.google.android.gms:play-services-identity:7.3.0'
-    compile 'com.google.android.gms:play-services-plus:7.3.0'
-    // compile 'com.google.android.gms:play-services:7.0.0'
-    compile 'com.firebase:firebase-client-android:2.0.3+'
+
+    // TODO: Use only the needed play-services, keep method count and size low.
+//    compile 'com.google.android.gms:play-services-identity:7.0.+'
+//    compile 'com.google.android.gms:play-services-plus:7.0.+'
+    compile 'com.google.android.gms:play-services:7.3.0'
+
+    compile 'com.firebase:firebase-client-android:2.0.3'
+    compile 'io.reactivex:rxandroid:0.24.0'
+
+    compile 'com.google.dagger:dagger:2.0'
+    apt "com.google.dagger:dagger-compiler:2.0"
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
 }

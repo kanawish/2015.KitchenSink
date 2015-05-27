@@ -6,7 +6,7 @@ android {
     buildToolsVersion extBuildToolsVersion
 
     defaultConfig {
-        applicationId "com.android_montreal.attendance"
+        applicationId "com.android_montreal.com.android_montreal.attendance"
         minSdkVersion 21
         targetSdkVersion extTargetSdkVersion
         versionCode extVersionCode

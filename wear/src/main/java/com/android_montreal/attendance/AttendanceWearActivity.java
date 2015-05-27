@@ -21,4 +21,5 @@ public class AttendanceWearActivity extends Activity {
          }
       });
    }
+
 }

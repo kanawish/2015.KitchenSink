@@ -1,0 +1,106 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              tools:context=".AttendanceActivityFragment"
+    >
+
+    <!--
+    <com.facebook.widget.LoginButton
+        android:id="@+id/login_with_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/login_with_facebook" />
+    -->
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/signInGoogleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_with_google"/>
+
+    <TableLayout
+        android:background="@drawable/rounded_corners"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        android:visibility="gone"
+        >
+        <TableRow
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <TextView android:text="Email"/>
+            <AutoCompleteTextView
+                android:id="@+id/userEmailField"
+                />
+        </TableRow>
+        <View android:layout_height="1dp"
+              android:background="#7ca87e00"
+              android:layout_margin="5dp"
+              android:layout_marginLeft="10dp"
+              android:layout_marginRight="10dp"/>
+        <TableRow
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <TextView android:text="Password"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:password="true"
+                android:id="@+id/passwordField"/>
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/authFirebaseWithGoogleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="F G+ Auth"
+            />
+        <Button
+            android:id="@+id/signoutComboButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="G+/F Sign out"
+            />
+        <Button
+            android:id="@+id/revokeGoogleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="G+ Revoke"
+            />
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow>
+            <TextView android:text="Firebase auth"/>
+            <TextView android:id="@+id/firebaseDebugText"/>
+        </TableRow>
+        <TableRow>
+            <TextView android:text="G+"/>
+            <TextView android:id="@+id/googleDebugText"/>
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/login_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textAlignment="center"
+        android:visibility="gone"/>
+
+
+</LinearLayout>
