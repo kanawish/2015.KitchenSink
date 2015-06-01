@@ -19,12 +19,8 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix '.dev'
+//            applicationIdSuffix '.dev'
             versionNameSuffix '-dev'
-        }
-        mock {
-            applicationIdSuffix '.mock'
-            versionNameSuffix '-mock'
         }
     }
 }

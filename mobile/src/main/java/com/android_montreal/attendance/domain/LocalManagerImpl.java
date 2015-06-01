@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import hugo.weaving.DebugLog;
 import rx.Observable;
-import rx.Observer;
 import rx.functions.Func1;
 
 /**
@@ -23,7 +22,7 @@ import rx.functions.Func1;
  * complexity in our app.
  *
  */
-public class LocalInteractorImpl implements LocalInteractor {
+public class LocalManagerImpl implements LocalManager {
 
    @Inject
    AccountManager accountManager;

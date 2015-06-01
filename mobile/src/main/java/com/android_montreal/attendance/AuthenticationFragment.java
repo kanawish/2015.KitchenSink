@@ -14,8 +14,9 @@ import android.widget.TextView;
 
 import com.android_montreal.attendance.domain.AuthManager;
 import com.android_montreal.attendance.domain.ErrorBus;
+import com.android_montreal.attendance.domain.FirebaseManager;
 import com.android_montreal.attendance.domain.GoogleAuthManager;
-import com.android_montreal.attendance.domain.LocalInteractor;
+import com.android_montreal.attendance.domain.LocalManager;
 import com.android_montreal.attendance.domain.RecoverableIssue;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -29,15 +30,14 @@ import javax.inject.Inject;
 import hugo.weaving.DebugLog;
 import rx.Subscription;
 import rx.functions.Action1;
+import timber.log.Timber;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class AttendanceActivityFragment extends Fragment
+public class AuthenticationFragment extends Fragment
 {
-
-   private static final String TAG = AttendanceActivityFragment.class.getSimpleName();
 
    /**
     * Utility class for authentication results
@@ -88,11 +88,12 @@ public class AttendanceActivityFragment extends Fragment
 
 
    /*** Model ***/
-   @Inject Firebase firebaseRef;
+   @Inject FirebaseManager firebaseRef;
    @Inject AuthManager authManager;
    @Inject GoogleAuthManager googleAuthManager;
 
-   @Inject LocalInteractor localInteractor;
+   @Inject
+   LocalManager localManager;
 
    @Inject ErrorBus errorBus;
 
@@ -104,7 +105,7 @@ public class AttendanceActivityFragment extends Fragment
    private Subscription subscriptionToIssues;
    private Subscription subscriptionToErrorBus;
 
-   public AttendanceActivityFragment() {
+   public AuthenticationFragment() {
    }
 
    @Override @DebugLog
@@ -258,7 +259,7 @@ public class AttendanceActivityFragment extends Fragment
          currentIssue = recoverableIssue;
          recoverableIssue.recover(getActivity(), GoogleAuthManager.RC_FRAG_GOOGLE_LOGIN);
       } else {
-         Log.i(TAG, "Ignoring recoverable issue until currentIssue is resolved.");
+         Timber.i("Ignoring recoverable issue until currentIssue is resolved.");
       }
    }
 
@@ -313,7 +314,7 @@ public class AttendanceActivityFragment extends Fragment
          {
             name = authData.getUid();
          } else {
-            Log.e(TAG, "Invalid provider: " + authData.getProvider());
+            Timber.e("Invalid provider: " + authData.getProvider());
          }
          if (name != null) {
             loggedInStatusTextView.setText("Logged in as " + name + " (" + authData.getProvider() + ")");

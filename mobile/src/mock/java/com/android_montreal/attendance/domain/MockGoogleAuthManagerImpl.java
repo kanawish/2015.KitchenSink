@@ -20,10 +20,13 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import hugo.weaving.DebugLog;
+import rx.Observable;
+import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
@@ -32,7 +35,7 @@ import timber.log.Timber;
 /**
  * Created by kanawish on 15-05-11.
  */
-public class GoogleAuthManagerImpl implements GoogleAuthManager {
+public class MockGoogleAuthManagerImpl implements GoogleAuthManager {
 
    @Inject
    FirebaseManager firebaseRef;
@@ -46,9 +49,6 @@ public class GoogleAuthManagerImpl implements GoogleAuthManager {
    Context appContext;
 
 
-   // Client used to interact with Google APIs.
-   private GoogleApiClient googleApiClient;
-
    // NOTE: This must always be set via setter, to keep the stateBus in a valid... state.
    private State state ;
    private Subject<State,State> stateBus ;
@@ -59,9 +59,8 @@ public class GoogleAuthManagerImpl implements GoogleAuthManager {
 
    // NOTE: Inject needed items for initialization methods, since attrib injection happens after construction.
    @Inject
-   public GoogleAuthManagerImpl(Context appContext) {
+   public MockGoogleAuthManagerImpl(Context appContext) {
       this.appContext = appContext;
-      this.googleApiClient = buildGoogleApiClient();
 
       this.setState(State.NONE);
    }
@@ -81,40 +80,24 @@ public class GoogleAuthManagerImpl implements GoogleAuthManager {
    @Override
    @DebugLog
    public void signin() {
-      if (!googleApiClient.isConnecting()) {
-         if (!googleApiClient.isConnected()) {
-            // Connect API now
-            Timber.d("Trying to connect to Google API");
-            setState(State.CONNECTING);
-            googleApiClient.connect();
-         }
-      }
+      // Connect API now
+      // TODO: Add a mock async connection attempt
+      Timber.d("Trying to connect to Google API");
+      setState(State.CONNECTING);
    }
 
    @Override
    @DebugLog
    public void signout() {
-      if (googleApiClient.isConnected()) {
-         Plus.AccountApi.clearDefaultAccount(googleApiClient);
-         googleApiClient.disconnect();
-
-         setState(State.NONE);
-         googleApiClient = buildGoogleApiClient();
-      }
+      // TODO: Mock the flow effects of a disconnect.
+      setState(State.NONE);
    }
 
    @Override
    @DebugLog
    public void revoke() {
-      Plus.AccountApi.clearDefaultAccount(googleApiClient);
-      // Our sample has caches no user data from Google+, however we
-      // would normally register a callback on revokeAccessAndDisconnect
-      // to delete user data so that we comply with Google developer
-      // policies.
-      Plus.AccountApi.revokeAccessAndDisconnect(googleApiClient);
-
+      // TODO: Mock the flow effects of a revoke.
       setState(State.NONE);
-      googleApiClient = buildGoogleApiClient();
    }
 
    /**
@@ -128,50 +111,20 @@ public class GoogleAuthManagerImpl implements GoogleAuthManager {
       // Signal we've started on the auth bus.
       authManager.setInProgress(true);
 
-      // TODO: Get rid of asynctask
-        /* Get OAuth token in Background */
-      AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-         // If set, sent on postExec()
-         String errorMessage = null;
-
-         @Override
-         @DebugLog
-         protected String doInBackground(Void... params) {
-            String token = null;
-
-            try {
-               String scope = String.format("oauth2:%s", Scopes.PLUS_LOGIN);
-               token = GoogleAuthUtil.getToken(appContext, Plus.AccountApi.getAccountName(googleApiClient), scope);
-            } catch (IOException transientEx) {
-               // Network or server error
-               Timber.e("Error authenticating with Google: " + transientEx);
-               errorMessage = "Network error: " + transientEx.getMessage();
-            } catch (UserRecoverableAuthException e) {
-               Timber.w("Recoverable Google OAuth error: " + e.toString());
-               // We probably need to ask for permissions.
-               send(new RecoverableIssueImpl(e));
-            } catch (GoogleAuthException authEx) {
-               // The call is not ever expected to succeed assuming you have already verified that Google Play services is installed.
-               Timber.e("Error authenticating with Google: " + authEx.getMessage(), authEx);
-               errorMessage = "Error authenticating with Google: " + authEx.getMessage();
-            }
-            return token;
-         }
-
-         @Override
-         @DebugLog
-         protected void onPostExecute(String token) {
-            if (token != null) {
+      // Simple auth mock
+      Observable.just("MOCK-GOOGLE-TOKEN")
+         .subscribeOn(Schedulers.newThread())
+         .observeOn(AndroidSchedulers.mainThread())
+         .subscribe(new Action1<String>() {
+            @Override
+            public void call(String token) {
                // Successfully got OAuth token, now login to Firebase with Google's OAuth token.
                firebaseRef.authWithOAuthToken("google", token, authManager.createAuthResultHandler("google"));
-            } else if (errorMessage != null) {
-               // Signal on the bus.
-               authManager.setInProgress(false);
-               errorBus.send(errorMessage);
             }
-         }
-      };
-      task.execute();
+         });
+
+      // TODO: Add artificial retry attempts?
+
    }
 
 
@@ -242,7 +195,7 @@ public class GoogleAuthManagerImpl implements GoogleAuthManager {
                // The intent was canceled before it was sent.  Return to the default
                // state and attempt to connect to get an updated ConnectionResult.
                setState(State.CONNECTING);
-               googleApiClient.connect();
+//               googleApiClient.connect();
             }
          } else if(recoverableAuthException!=null) {
             Intent recover = recoverableAuthException.getIntent();
@@ -252,9 +205,9 @@ public class GoogleAuthManagerImpl implements GoogleAuthManager {
 
       @Override
       public void recoveryAttempResult(int resultCode) {
-         if( !googleApiClient.isConnecting() ) {
-            googleApiClient.connect();
-         }
+//         if( !googleApiClient.isConnecting() ) {
+//            googleApiClient.connect();
+//         }
       }
    }
 

@@ -13,14 +13,13 @@ import rx.Observable;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
+import timber.log.Timber;
 
 /**
  * Created by kanawish on 15-05-12.
  */
 @Singleton
 public class AuthManager {
-
-   private static final String TAG = AuthManager.class.getSimpleName();
 
    @Inject ErrorBus errorBus;
 
@@ -84,7 +83,7 @@ public class AuthManager {
       @Override
       public void onAuthenticated(AuthData authData) {
          // FIXME: Fire event on bus / publish data.
-         Log.i(TAG, provider + " auth successful");
+         Timber.i(provider + " auth successful");
          // authProgressDialog.hide();
          setInProgress(false);
          setAuthenticatedUser(authData);

@@ -3,10 +3,13 @@ package com.android_montreal.attendance.module;
 import android.content.Context;
 
 import com.android_montreal.attendance.R;
+import com.android_montreal.attendance.domain.FirebaseManager;
+import com.android_montreal.attendance.domain.FirebaseManagerImpl;
 import com.android_montreal.attendance.domain.GoogleAuthManager;
 import com.android_montreal.attendance.domain.GoogleAuthManagerImpl;
-import com.android_montreal.attendance.domain.LocalInteractor;
-import com.android_montreal.attendance.domain.LocalInteractorImpl;
+import com.android_montreal.attendance.domain.LocalManager;
+import com.android_montreal.attendance.domain.LocalManagerImpl;
+import com.android_montreal.attendance.domain.MockFirebaseManagerImpl;
 import com.firebase.client.Firebase;
 
 import javax.inject.Singleton;
@@ -24,19 +27,28 @@ import dagger.Provides;
 public class DomainModule {
 
    @Provides @Singleton
-   LocalInteractor provideLocalInteractor() {
-      return new LocalInteractorImpl();
+   LocalManager provideLocalManager() {
+      return new LocalManagerImpl();
    }
 
    @Provides @Singleton
-   public Firebase getFirebaseInstance(Context appContext){
+   FirebaseManager provideFirebaseManager(Context appContext) {
+      /* Create the Firebase ref that is used for authentication with Firebase */
+      Firebase.setAndroidContext(appContext);
+
+      return new FirebaseManagerImpl(new Firebase(appContext.getResources().getString(R.string.firebase_url)));
+   };
+
+
+   @Provides @Singleton
+   Firebase getFirebaseInstance(Context appContext){
       /* Create the Firebase ref that is used for all authentication with Firebase */
       Firebase.setAndroidContext(appContext);
       return new Firebase(appContext.getResources().getString(R.string.firebase_url));
    }
 
    @Provides @Singleton
-   public GoogleAuthManager provideGoogleAuthManager(GoogleAuthManagerImpl impl) {
+   GoogleAuthManager provideGoogleAuthManager(GoogleAuthManagerImpl impl) {
       return impl;
    }
 

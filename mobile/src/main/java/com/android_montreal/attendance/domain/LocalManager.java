@@ -9,6 +9,6 @@ import rx.Observable;
 /**
  * Created by kanawish on 15-05-11.
  */
-public interface LocalInteractor {
+public interface LocalManager {
    Observable<List<Account>> getAccountEmailsObservable();
 }

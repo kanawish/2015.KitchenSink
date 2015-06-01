@@ -41,11 +41,11 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix '.dev'
+//            applicationIdSuffix '.dev'
             versionNameSuffix '-dev'
         }
         mock {
-            applicationIdSuffix '.mock'
+//            applicationIdSuffix '.mock'
             versionNameSuffix '-mock'
         }
         release {
@@ -78,6 +78,8 @@ dependencies {
 //    compile 'com.google.android.gms:play-services-plus:7.0.+'
     compile 'com.google.android.gms:play-services:7.3.0'
 
+    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'com.jakewharton.timber:timber:3.1.0'
     compile 'com.firebase:firebase-client-android:2.0.3'
     compile 'io.reactivex:rxandroid:0.24.0'
 
