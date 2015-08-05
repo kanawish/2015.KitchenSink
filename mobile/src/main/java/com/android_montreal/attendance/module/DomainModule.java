@@ -9,7 +9,6 @@ import com.android_montreal.attendance.domain.GoogleAuthManager;
 import com.android_montreal.attendance.domain.GoogleAuthManagerImpl;
 import com.android_montreal.attendance.domain.LocalManager;
 import com.android_montreal.attendance.domain.LocalManagerImpl;
-import com.android_montreal.attendance.domain.MockFirebaseManagerImpl;
 import com.firebase.client.Firebase;
 
 import javax.inject.Singleton;
@@ -38,7 +37,6 @@ public class DomainModule {
 
       return new FirebaseManagerImpl(new Firebase(appContext.getResources().getString(R.string.firebase_url)));
    };
-
 
    @Provides @Singleton
    Firebase getFirebaseInstance(Context appContext){

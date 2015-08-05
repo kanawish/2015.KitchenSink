@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import hugo.weaving.DebugLog;
 
 /**
@@ -21,17 +21,17 @@ public class CheckInFragment extends Fragment {
 
 
 
-   @InjectView(R.id.gdgBadgeImageView)
+   @Bind(R.id.gdgBadgeImageView)
    ImageView gdgBadgeImageView;
 
-   @InjectView(R.id.meetTitleLabel)
+   @Bind(R.id.meetTitleLabel)
    TextView meetTitleLabel;
-   @InjectView(R.id.dateTimeLabel)
+   @Bind(R.id.dateTimeLabel)
    TextView dateTimeLabel;
-   @InjectView(R.id.gdgNameLabel)
+   @Bind(R.id.gdgNameLabel)
    TextView gdgNameLabel;
 
-   @InjectView(R.id.checkInButton)
+   @Bind(R.id.checkInButton)
    Button checkInButton;
 
    @Override
@@ -39,7 +39,7 @@ public class CheckInFragment extends Fragment {
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view = inflater.inflate(R.layout.fragment_checkin, container, false);
 
-      ButterKnife.inject(this, view);
+      ButterKnife.bind(this, view);
 
       return view;
    }
@@ -79,6 +79,6 @@ public class CheckInFragment extends Fragment {
    @Override
    public void onDestroyView() {
       super.onDestroyView();
-      ButterKnife.reset(this);
+      ButterKnife.unbind(this);
    }
 }

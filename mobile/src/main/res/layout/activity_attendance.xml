@@ -4,4 +4,5 @@
           android:name="com.android_montreal.attendance.CheckInFragment"
           tools:layout="@layout/fragment_checkin"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"/>
+          android:layout_height="match_parent"
+    />

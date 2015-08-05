@@ -26,6 +26,9 @@ ext {
     extVersionCode = 1;
     extVersionName = "1.0";
 
+    extSourceCompatibility = JavaVersion.VERSION_1_7;
+    extTargetCompatibility = JavaVersion.VERSION_1_7;
+
 }
 
 allprojects {
